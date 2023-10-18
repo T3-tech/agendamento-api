@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using agendamento_api.Dtos;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace agendamento_api.Models
 {
@@ -8,8 +10,19 @@ namespace agendamento_api.Models
         public int Id { get; set; }
         [Required]
         public string Nome { get; set; }
+        [Required]
         public double Valor { get; set; }
-        public Profissional Profissional { get; set; } = null!;
+        [Required]
+        public int ProfissionalId { get; set; }
+        public virtual Profissional Profissional { get; set; }
+
+
+        public Servico(string nome, double valor, int profissionalId) {
+            this.Nome = nome;
+            this.Valor = valor;
+            this.ProfissionalId = profissionalId;
+        }
+
 
     }
 }

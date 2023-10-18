@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using agendamento_api.Data;
 using agendamento_api.Models;
+using agendamento_api.Dtos;
+using agendamento_api.DtoResponse;
 
 namespace agendamento_api.Controllers
 {
@@ -23,13 +25,34 @@ namespace agendamento_api.Controllers
 
         // GET: api/Profissionais
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profissional>>> GetProfissionais()
+        public async Task<ActionResult<IEnumerable<ProfissionalResponse>>> GetProfissionais()
         {
           if (_context.Profissionais == null)
           {
               return NotFound();
           }
-            return await _context.Profissionais.ToListAsync();
+            var listaProfissional = await _context.Profissionais.ToListAsync();
+
+            List<Servico> servicosProfissional = await _context.Servicos.ToListAsync();
+
+
+            List<ProfissionalResponse> listaProfissionalResponses = new List<ProfissionalResponse>();
+            
+
+            foreach (var item in listaProfissional) { 
+                ProfissionalResponse profissionalResponse = new ProfissionalResponse(item.Id, item.Nome);
+
+                var listaServicos = servicosProfissional.Where(e => e.ProfissionalId.Equals(item.Id)).ToList();
+                List<ServicoDto> listaServicoResponse = new List<ServicoDto>();
+                foreach (var itemServico in listaServicos) {
+                    ServicoDto servicoDto = new ServicoDto(itemServico.Nome,itemServico.Valor, itemServico.ProfissionalId );
+                    listaServicoResponse.Add(servicoDto);
+                }
+
+                profissionalResponse.ListaServico = listaServicoResponse;
+                listaProfissionalResponses.Add(profissionalResponse);
+            }
+            return listaProfissionalResponses;
         }
 
         // GET: api/Profissionais/5
@@ -84,12 +107,14 @@ namespace agendamento_api.Controllers
         // POST: api/Profissionais
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Profissional>> PostProfissional(Profissional profissional)
+        public async Task<ActionResult<Profissional>> PostProfissional(ProfissionalDto profissionalDto)
         {
           if (_context.Profissionais == null)
           {
               return Problem("Entity set 'AgendamentoContext.Profissionais'  is null.");
           }
+            Profissional profissional = new Profissional(profissionalDto.Nome, profissionalDto.Telefone);
+
             _context.Profissionais.Add(profissional);
             await _context.SaveChangesAsync();
 
