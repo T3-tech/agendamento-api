@@ -8,7 +8,8 @@ namespace agendamento_api.Dtos
         public string Nome { get; set; }
         [Required]
         public string Telefone { get; set; }
-
+        [Required]
+        public string Cpf { get; set; }
 
 
         

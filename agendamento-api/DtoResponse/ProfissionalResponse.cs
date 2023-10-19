@@ -8,7 +8,7 @@ namespace agendamento_api.DtoResponse
         public int Id { get; set; }
        
         public string Nome { get; set; }
-        public List<ServicoDto> ListaServico { get; set; } = new List<ServicoDto>();
+        public List<Object> ListaServico { get; set; } = new List<Object>();
 
 
         public ProfissionalResponse(int id, string nome) {

@@ -43,10 +43,17 @@ namespace agendamento_api.Controllers
                 ProfissionalResponse profissionalResponse = new ProfissionalResponse(item.Id, item.Nome);
 
                 var listaServicos = servicosProfissional.Where(e => e.ProfissionalId.Equals(item.Id)).ToList();
-                List<ServicoDto> listaServicoResponse = new List<ServicoDto>();
+
+                List<Object> listaServicoResponse = new List<Object>();
+
                 foreach (var itemServico in listaServicos) {
-                    ServicoDto servicoDto = new ServicoDto(itemServico.Nome,itemServico.Valor, itemServico.ProfissionalId );
-                    listaServicoResponse.Add(servicoDto);
+                    var servicoResp = new
+                    {
+                        nomeSevico = itemServico.Nome,
+                        valor = itemServico.Valor
+                    };
+                    //ServicoDto servicoDto = new ServicoDto(itemServico.Nome,itemServico.Valor, itemServico.ProfissionalId );
+                    listaServicoResponse.Add(servicoResp);
                 }
 
                 profissionalResponse.ListaServico = listaServicoResponse;
@@ -107,18 +114,31 @@ namespace agendamento_api.Controllers
         // POST: api/Profissionais
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Profissional>> PostProfissional(ProfissionalDto profissionalDto)
+        public async Task<ActionResult> PostProfissional(ProfissionalDto profissionalDto)
         {
           if (_context.Profissionais == null)
           {
               return Problem("Entity set 'AgendamentoContext.Profissionais'  is null.");
           }
-            Profissional profissional = new Profissional(profissionalDto.Nome, profissionalDto.Telefone);
 
-            _context.Profissionais.Add(profissional);
-            await _context.SaveChangesAsync();
+            bool existCpf = _context.Profissionais.Any(p => p.Cpf == profissionalDto.Cpf);
+            if (!existCpf)
+            {
+                Profissional profissional = new Profissional(profissionalDto.Nome, profissionalDto.Telefone, profissionalDto.Cpf);
 
-            return CreatedAtAction("GetProfissional", new { id = profissional.Id }, profissional);
+                _context.Profissionais.Add(profissional);
+                await _context.SaveChangesAsync();
+                var profissionalResponse = new
+                {
+                    nome = profissionalDto.Nome,
+                    telefone = profissionalDto.Telefone
+                };
+                return Ok(profissionalResponse);
+            }
+            else {
+                return BadRequest("Já existe cpf cadastrado no banco");
+            }
+            
         }
 
         // DELETE: api/Profissionais/5
