@@ -22,6 +22,13 @@ namespace agendamento_api.Models
             this.Valor = valor;
             this.ProfissionalId = profissionalId;
         }
+        public Servico(int id, string nome, double valor, int profissionalId)
+        {
+            this.Id = id;
+            this.Nome = nome;
+            this.Valor = valor;
+            this.ProfissionalId = profissionalId;
+        }
 
 
     }

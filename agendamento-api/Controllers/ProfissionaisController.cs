@@ -121,9 +121,8 @@ namespace agendamento_api.Controllers
               return Problem("Entity set 'AgendamentoContext.Profissionais'  is null.");
           }
 
-            bool existCpf = _context.Profissionais.Any(p => p.Cpf == profissionalDto.Cpf);
-            if (!existCpf)
-            {
+            
+           
                 Profissional profissional = new Profissional(profissionalDto.Nome, profissionalDto.Telefone, profissionalDto.Cpf);
 
                 _context.Profissionais.Add(profissional);
@@ -134,10 +133,8 @@ namespace agendamento_api.Controllers
                     telefone = profissionalDto.Telefone
                 };
                 return Ok(profissionalResponse);
-            }
-            else {
-                return BadRequest("Já existe cpf cadastrado no banco");
-            }
+            
+            
             
         }
 

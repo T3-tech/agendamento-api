@@ -9,6 +9,7 @@ using agendamento_api.Data;
 using agendamento_api.Models;
 using agendamento_api.Dtos;
 using agendamento_api.DtoResponse;
+using agendamento_api.DtosRequest;
 
 namespace agendamento_api.Controllers
 {
@@ -46,32 +47,33 @@ namespace agendamento_api.Controllers
 
         // GET: api/Servicos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Servico>> GetServico(int id)
+        public async Task<ActionResult<ServicoReponse>> GetServico(int id)
         {
           if (_context.Servicos == null)
           {
               return NotFound();
           }
             var servico = await _context.Servicos.FindAsync(id);
-
+           
             if (servico == null)
             {
                 return NotFound();
             }
-
-            return servico;
+            var profissional = await _context.Profissionais.FindAsync(servico.ProfissionalId);
+            ServicoReponse servicoResponse = new ServicoReponse(servico.Id, servico.Nome, servico.Valor, profissional.Nome);
+            return servicoResponse;
         }
 
         // PUT: api/Servicos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutServico(int id, Servico servico)
+        public async Task<IActionResult> PutServico(int id, ServicoDtoUpdate servicoDtoUpdate)
         {
-            if (id != servico.Id)
+            if (id != servicoDtoUpdate.Id)
             {
                 return BadRequest();
             }
-
+            Servico servico = new Servico(servicoDtoUpdate.Id, servicoDtoUpdate.Nome, servicoDtoUpdate.Valor, servicoDtoUpdate.ProfissionalId);
             _context.Entry(servico).State = EntityState.Modified;
 
             try
