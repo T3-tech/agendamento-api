@@ -10,6 +10,7 @@ namespace agendamento_api.Models
         public string Data { get; set; }
         public Servico Servicos { get; set; }
         public Cliente Clientes { get; set; }
-        public Status Status { get; set; }
+        public int StatusId { get; set; }
+        public virtual Status Status { get; set; }
     }
 }

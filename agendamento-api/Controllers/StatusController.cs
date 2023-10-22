@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using agendamento_api.Data;
 using agendamento_api.Models;
+using agendamento_api.DtosRequest;
+using agendamento_api.DtoResponse;
 
 namespace agendamento_api.Controllers
 {
@@ -23,18 +25,25 @@ namespace agendamento_api.Controllers
 
         // GET: api/Status
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Status>>> GetStatus()
+        public async Task<ActionResult<IEnumerable<StatusResponse>>> GetStatus()
         {
           if (_context.Status == null)
           {
               return NotFound();
           }
-            return await _context.Status.ToListAsync();
+            var status = await _context.Status.ToListAsync();
+            List<StatusResponse> listaStatusReponse = new List<StatusResponse>();
+            foreach (var item in status) {
+                StatusResponse statusReponse = new StatusResponse(item.Id, item.Nome);
+                listaStatusReponse.Add(statusReponse);
+            }
+
+            return listaStatusReponse.OrderBy(s => s.Id).ToList();
         }
 
         // GET: api/Status/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Status>> GetStatus(int id)
+        public async Task<ActionResult<StatusResponse>> GetStatus(int id)
         {
           if (_context.Status == null)
           {
@@ -42,24 +51,26 @@ namespace agendamento_api.Controllers
           }
             var status = await _context.Status.FindAsync(id);
 
+            StatusResponse statusResponse = new StatusResponse(status.Id, status.Nome);
+
             if (status == null)
             {
                 return NotFound();
             }
 
-            return status;
+            return statusResponse;
         }
 
         // PUT: api/Status/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatus(int id, Status status)
+        public async Task<IActionResult> PutStatus(int id, StatusDtoUpdate statusUpdate)
         {
-            if (id != status.Id)
+            if (id != statusUpdate.Id)
             {
                 return BadRequest();
             }
-
+            Status status = new Status(statusUpdate.Id, statusUpdate.Nome);
             _context.Entry(status).State = EntityState.Modified;
 
             try
@@ -84,16 +95,19 @@ namespace agendamento_api.Controllers
         // POST: api/Status
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Status>> PostStatus(Status status)
+        public async Task<ActionResult> PostStatus(StatusDto statusDto)
         {
           if (_context.Status == null)
           {
               return Problem("Entity set 'AgendamentoContext.Status'  is null.");
           }
+
+            Status status = new Status(statusDto.Nome);
             _context.Status.Add(status);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStatus", new { id = status.Id }, status);
+            StatusResponse statusResponse = new StatusResponse(status.Id, status.Nome);
+            return Ok(statusResponse);
         }
 
         // DELETE: api/Status/5
