@@ -24,5 +24,12 @@ namespace agendamento_api.Models
             this.Telefone = telefone;
             this.Cpf = cpf;
         }
+
+        public Profissional(int id, string nome, string telefone, string cpf) {
+            this.Id = id;
+            this.Nome = nome;
+            this.Telefone = telefone;
+            this.Cpf = cpf;
+        }
     }
 }

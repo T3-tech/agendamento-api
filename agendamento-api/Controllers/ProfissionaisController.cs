@@ -9,6 +9,7 @@ using agendamento_api.Data;
 using agendamento_api.Models;
 using agendamento_api.Dtos;
 using agendamento_api.DtoResponse;
+using agendamento_api.DtosRequest;
 
 namespace agendamento_api.Controllers
 {
@@ -59,7 +60,7 @@ namespace agendamento_api.Controllers
                 profissionalResponse.ListaServico = listaServicoResponse;
                 listaProfissionalResponses.Add(profissionalResponse);
             }
-            return listaProfissionalResponses;
+            return listaProfissionalResponses.OrderBy(p => p.Id).ToList();
         }
 
         // GET: api/Profissionais/5
@@ -107,13 +108,14 @@ namespace agendamento_api.Controllers
         // PUT: api/Profissionais/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfissional(int id, Profissional profissional)
+        public async Task<IActionResult> PutProfissional(int id, ProfissionalDtoUpdate profissionalUpdate)
         {
-            if (id != profissional.Id)
+            if (id != profissionalUpdate.Id)
             {
                 return BadRequest();
             }
 
+            Profissional profissional = new Profissional(profissionalUpdate.Id, profissionalUpdate.Nome, profissionalUpdate.Telefone, profissionalUpdate.Cpf);
             _context.Entry(profissional).State = EntityState.Modified;
 
             try
