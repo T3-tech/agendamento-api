@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using agendamento_api.Data;
 using agendamento_api.Models;
+using agendamento_api.DtosRequest;
 
 namespace agendamento_api.Controllers
 {
@@ -84,16 +85,21 @@ namespace agendamento_api.Controllers
         // POST: api/Clientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public async  Task<ActionResult> PostCliente(ClienteDto clienteDto)
         {
           if (_context.Clientes == null)
           {
               return Problem("Entity set 'AgendamentoContext.Clientes'  is null.");
           }
+            Cliente cliente = new Cliente(clienteDto.Nome, clienteDto.Telefone);
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
+            var clienteResponse = new
+            {
+                nome = cliente.Nome,
+                telefone = cliente.Telefone
+            };
+            return Ok(clienteResponse);
         }
 
         // DELETE: api/Clientes/5
