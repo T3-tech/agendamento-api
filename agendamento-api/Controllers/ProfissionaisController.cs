@@ -52,7 +52,7 @@ namespace agendamento_api.Controllers
                         nomeSevico = itemServico.Nome,
                         valor = itemServico.Valor
                     };
-                    //ServicoDto servicoDto = new ServicoDto(itemServico.Nome,itemServico.Valor, itemServico.ProfissionalId );
+                    
                     listaServicoResponse.Add(servicoResp);
                 }
 
@@ -64,20 +64,44 @@ namespace agendamento_api.Controllers
 
         // GET: api/Profissionais/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profissional>> GetProfissional(int id)
+        public async Task<ActionResult<ProfissionalResponse>> GetProfissional(int id)
         {
           if (_context.Profissionais == null)
           {
               return NotFound();
           }
             var profissional = await _context.Profissionais.FindAsync(id);
+            List<Servico> servicosProfissional = await _context.Servicos.ToListAsync();
+
+
+            var listaServicos = servicosProfissional.Where(e => e.ProfissionalId.Equals(profissional.Id)).ToList();
+
+            List<Object> listaServicoResponse = new List<Object>();
+
+
+            foreach (var itemServico in listaServicos)
+            {
+                var servicoResp = new
+                {
+                    nomeSevico = itemServico.Nome,
+                    valor = itemServico.Valor
+                };
+
+                listaServicoResponse.Add(servicoResp);
+            }
+
+            ProfissionalResponse profissionalResponse = new ProfissionalResponse(profissional.Id, profissional.Nome);
+            profissionalResponse.ListaServico = listaServicoResponse;
+
+
+
 
             if (profissional == null)
             {
                 return NotFound();
             }
 
-            return profissional;
+            return profissionalResponse;
         }
 
         // PUT: api/Profissionais/5
