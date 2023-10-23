@@ -110,14 +110,17 @@ namespace agendamento_api.Controllers
         // PUT: api/Profissionais/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfissional(int id, ProfissionalDtoUpdate profissionalUpdate)
+        public async Task<IActionResult> PutProfissional(int id, ProfissionalDto profissionalDto)
         {
-            if (id != profissionalUpdate.Id)
-            {
-                return BadRequest();
-            }
 
-            Profissional profissional = new Profissional(profissionalUpdate.Id, profissionalUpdate.Nome, profissionalUpdate.Telefone, profissionalUpdate.Cpf);
+
+
+            var profissional = await _context.Profissionais.FindAsync(id);
+
+            profissional.Nome = profissionalDto.Nome;
+            profissional.Telefone = profissionalDto.Telefone;
+            profissional.Cpf = profissionalDto.Cpf;
+
             _context.Entry(profissional).State = EntityState.Modified;
 
             try

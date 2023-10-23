@@ -65,13 +65,14 @@ namespace agendamento_api.Controllers
         // PUT: api/Status/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatus(int id, StatusDtoUpdate statusUpdate)
+        public async Task<IActionResult> PutStatus(int id, StatusDto statusDto)
         {
-            if (id != statusUpdate.Id)
-            {
-                return BadRequest();
-            }
-            Status status = new(statusUpdate.Id, statusUpdate.Nome);
+
+            var status = await _context.Status.FindAsync(id);
+
+            status.Nome = statusDto.Nome;
+
+
             _context.Entry(status).State = EntityState.Modified;
 
             try

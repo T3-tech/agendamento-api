@@ -28,10 +28,10 @@ namespace agendamento_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServicoReponse>>> GetServicos()
         {
-          if (_context.Servicos == null)
-          {
-              return NotFound();
-          }
+            if (_context.Servicos == null)
+            {
+                return NotFound();
+            }
             List<ServicoReponse> servicoReponses = new List<ServicoReponse>();
             List<Servico> list = await _context.Servicos.ToListAsync();
             foreach (var item in list)
@@ -49,12 +49,12 @@ namespace agendamento_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServicoReponse>> GetServico(int id)
         {
-          if (_context.Servicos == null)
-          {
-              return NotFound();
-          }
+            if (_context.Servicos == null)
+            {
+                return NotFound();
+            }
             var servico = await _context.Servicos.FindAsync(id);
-           
+
             if (servico == null)
             {
                 return NotFound();
@@ -67,13 +67,16 @@ namespace agendamento_api.Controllers
         // PUT: api/Servicos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutServico(int id, ServicoDtoUpdate servicoDtoUpdate)
+        public async Task<IActionResult> PutServico(int id, ServicoDto servicoDto)
         {
-            if (id != servicoDtoUpdate.Id)
-            {
-                return BadRequest();
-            }
-            Servico servico = new Servico(servicoDtoUpdate.Id, servicoDtoUpdate.Nome, servicoDtoUpdate.Valor, servicoDtoUpdate.ProfissionalId);
+
+            var servico = await _context.Servicos.FindAsync(id);
+
+            servico.Nome = servicoDto.Nome;
+            servico.Valor = servicoDto.Valor;
+            servico.ProfissionalId = servicoDto.ProfissionalId;
+
+
             _context.Entry(servico).State = EntityState.Modified;
 
             try
@@ -100,15 +103,15 @@ namespace agendamento_api.Controllers
         [HttpPost]
         public async Task<ActionResult> PostServico(ServicoDto servicoDto)
         {
-          if (_context.Servicos == null)
-          {
-              return Problem("Entity set 'AgendamentoContext.Servicos'  is null.");
-          }
+            if (_context.Servicos == null)
+            {
+                return Problem("Entity set 'AgendamentoContext.Servicos'  is null.");
+            }
             var profissional = await _context.Profissionais.FindAsync(servicoDto.ProfissionalId);
 
-            
 
-            
+
+
 
             if (profissional != null)
             {
@@ -121,7 +124,7 @@ namespace agendamento_api.Controllers
 
                 return Ok(servicoResponse);
             }
-            
+
 
             return BadRequest();
         }
