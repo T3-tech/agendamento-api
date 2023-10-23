@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using agendamento_api.Data;
@@ -11,9 +12,11 @@ using agendamento_api.Data;
 namespace agendamento_api.Migrations
 {
     [DbContext(typeof(AgendamentoContext))]
-    partial class AgendamentoContextModelSnapshot : ModelSnapshot
+    [Migration("20231023230435_ajustesTecnicos")]
+    partial class ajustesTecnicos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

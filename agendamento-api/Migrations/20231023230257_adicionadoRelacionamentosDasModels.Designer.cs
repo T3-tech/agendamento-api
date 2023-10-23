@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using agendamento_api.Data;
@@ -11,9 +12,11 @@ using agendamento_api.Data;
 namespace agendamento_api.Migrations
 {
     [DbContext(typeof(AgendamentoContext))]
-    partial class AgendamentoContextModelSnapshot : ModelSnapshot
+    [Migration("20231023230257_adicionadoRelacionamentosDasModels")]
+    partial class adicionadoRelacionamentosDasModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,10 +43,13 @@ namespace agendamento_api.Migrations
                     b.Property<int?>("ProfissionalId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ServicoId")
+                    b.Property<int>("ServicosId")
                         .HasColumnType("integer");
 
                     b.Property<int>("StatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("idServico")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -52,7 +58,7 @@ namespace agendamento_api.Migrations
 
                     b.HasIndex("ProfissionalId");
 
-                    b.HasIndex("ServicoId");
+                    b.HasIndex("ServicosId");
 
                     b.HasIndex("StatusId");
 
@@ -165,7 +171,7 @@ namespace agendamento_api.Migrations
 
                     b.HasOne("agendamento_api.Models.Servico", "Servicos")
                         .WithMany("Agendamentos")
-                        .HasForeignKey("ServicoId")
+                        .HasForeignKey("ServicosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -8,7 +8,7 @@ namespace agendamento_api.Models
         public int Id { get; set; }
         [Required]
         public string Nome { get; set; }
-        public ICollection<Agendamento> agendamentos { get; set; }
+        public ICollection<Agendamento> Agendamentos { get; set; }
 
 
         public Status(string nome) {

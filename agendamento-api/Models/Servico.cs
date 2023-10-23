@@ -15,7 +15,7 @@ namespace agendamento_api.Models
         [Required]
         public int ProfissionalId { get; set; }
         public virtual Profissional Profissional { get; set; }
-
+        public virtual ICollection<Agendamento> Agendamentos {get;set;}
 
         public Servico(string nome, double valor, int profissionalId) {
             this.Nome = nome;
