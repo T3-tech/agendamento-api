@@ -87,6 +87,7 @@ namespace agendamento_api.Controllers
             {
                 var servicoResp = new
                 {
+                    idServico = itemServico.Id,
                     nomeSevico = itemServico.Nome,
                     valor = itemServico.Valor
                 };
