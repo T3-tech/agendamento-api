@@ -95,10 +95,7 @@ namespace agendamento_api.Controllers
                 listaServicoResponse.Add(servicoResp);
             }
 
-            ProfissionalResponse profissionalResponse = new(profissional.Id, profissional.Nome, profissional.Telefone, profissional.Cpf);
-            profissionalResponse.ListaServico = listaServicoResponse;
-
-
+            ProfissionalResponse profissionalResponse = new(profissional.Id, profissional.Nome, profissional.Telefone, profissional.Cpf, listaServicoResponse);
 
 
             if (profissional == null)

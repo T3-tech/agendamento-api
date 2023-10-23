@@ -11,7 +11,5 @@ namespace agendamento_api.Dtos
         [Required]
         public string Cpf { get; set; }
 
-
-        
     }
 }
