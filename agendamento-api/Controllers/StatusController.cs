@@ -27,13 +27,14 @@ namespace agendamento_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StatusResponse>>> GetStatus()
         {
-          if (_context.Status == null)
-          {
-              return NotFound();
-          }
+            if (_context.Status == null)
+            {
+                return NotFound();
+            }
             var status = await _context.Status.ToListAsync();
             List<StatusResponse> listaStatusReponse = new List<StatusResponse>();
-            foreach (var item in status) {
+            foreach (var item in status)
+            {
                 StatusResponse statusReponse = new StatusResponse(item.Id, item.Nome);
                 listaStatusReponse.Add(statusReponse);
             }
@@ -45,10 +46,10 @@ namespace agendamento_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<StatusResponse>> GetStatus(int id)
         {
-          if (_context.Status == null)
-          {
-              return NotFound();
-          }
+            if (_context.Status == null)
+            {
+                return NotFound();
+            }
             var status = await _context.Status.FindAsync(id);
 
             StatusResponse statusResponse = new StatusResponse(status.Id, status.Nome);
@@ -70,7 +71,7 @@ namespace agendamento_api.Controllers
             {
                 return BadRequest();
             }
-            Status status = new Status(statusUpdate.Id, statusUpdate.Nome);
+            Status status = new(statusUpdate.Id, statusUpdate.Nome);
             _context.Entry(status).State = EntityState.Modified;
 
             try
@@ -97,10 +98,10 @@ namespace agendamento_api.Controllers
         [HttpPost]
         public async Task<ActionResult> PostStatus(StatusDto statusDto)
         {
-          if (_context.Status == null)
-          {
-              return Problem("Entity set 'AgendamentoContext.Status'  is null.");
-          }
+            if (_context.Status == null)
+            {
+                return Problem("Entity set 'AgendamentoContext.Status'  is null.");
+            }
 
             Status status = new Status(statusDto.Nome);
             _context.Status.Add(status);
