@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using agendamento_api.Data;
 using agendamento_api.Models;
+using agendamento_api.DtosRequest;
 
 namespace agendamento_api.Controllers
 {
@@ -84,16 +85,19 @@ namespace agendamento_api.Controllers
         // POST: api/Agendamentos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Agendamento>> PostAgendamento(Agendamento agendamento)
+        public async Task<ActionResult>PostAgendamento(AgendamentoDto agendamentoDto)
         {
           if (_context.Agendamentos == null)
           {
               return Problem("Entity set 'AgendamentoContext.Agendamentos'  is null.");
           }
+            Agendamento agendamento = new Agendamento(agendamentoDto.Data, agendamentoDto.ServicoId, agendamentoDto.ClienteId, agendamentoDto.StatusId);
             _context.Agendamentos.Add(agendamento);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAgendamento", new { id = agendamento.Id }, agendamento);
+            
+
+            return Ok("Sucesso ao criar");
         }
 
         // DELETE: api/Agendamentos/5

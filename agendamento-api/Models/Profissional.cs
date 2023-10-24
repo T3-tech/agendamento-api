@@ -18,7 +18,7 @@ namespace agendamento_api.Models
         [Required]
         public string Telefone { get; set; }
         public virtual ICollection<Servico>? Servicos { get; set; }
-        public virtual ICollection<Agendamento>? Agendamentos { get; set; }
+        
         public Profissional(string nome, string telefone, string cpf) {
             this.Nome = nome;
             this.Telefone = telefone;

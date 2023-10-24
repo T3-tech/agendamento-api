@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace agendamento_api.DtosRequest
 {
@@ -7,12 +8,12 @@ namespace agendamento_api.DtosRequest
         [Required]
         public string Data { get; set; }
         [Required]
-        public int StatusId { get; set; }
+        public int ServicoId { get; set; }
         [Required]
+        
+        
         public int ClienteId { get; set; }
         [Required]
-        public int ProfissionalId { get; set; }
-        [Required]
-        public int ServicoId { get; set; }
+        public int StatusId { get; set; }
     }
 }

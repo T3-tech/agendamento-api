@@ -17,5 +17,13 @@ namespace agendamento_api.Models
         [Required]
         public int StatusId { get; set; }
         public virtual Status Status { get; set; }
+
+        public Agendamento(string data, int servicoId, int clienteId, int statusId)
+        {
+            Data = data;
+            ServicoId = servicoId;
+            ClienteId = clienteId;
+            StatusId = statusId;
+        }
     }
 }
