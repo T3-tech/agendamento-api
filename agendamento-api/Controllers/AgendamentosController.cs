@@ -103,7 +103,7 @@ namespace agendamento_api.Controllers
                 return BadRequest("Já existe um agendamento neste horário");
             }
 
-            agendamento.Data = agendamentoDto.Data;
+            agendamento.Data = agendamentoDto.Data.Trim();
             agendamento.ServicoId = agendamentoDto.ServicoId;
             agendamento.ClienteId = agendamentoDto.ClienteId;
             agendamento.StatusId = agendamentoDto.StatusId;
@@ -139,11 +139,11 @@ namespace agendamento_api.Controllers
               return Problem("Entity set 'AgendamentoContext.Agendamentos'  is null.");
           }
 
-            if (DataExists(agendamentoDto.ServicoId, agendamentoDto.Data)) 
+            if (DataExists(agendamentoDto.ServicoId, agendamentoDto.Data.Trim())) 
             {
                 return BadRequest("Já existe um agendamento neste horário");
             }
-            Agendamento agendamento = new Agendamento(agendamentoDto.Data, agendamentoDto.ServicoId, agendamentoDto.ClienteId, agendamentoDto.StatusId);
+            Agendamento agendamento = new Agendamento(agendamentoDto.Data.Trim(), agendamentoDto.ServicoId, agendamentoDto.ClienteId, agendamentoDto.StatusId);
             _context.Agendamentos.Add(agendamento);
             await _context.SaveChangesAsync();
 
