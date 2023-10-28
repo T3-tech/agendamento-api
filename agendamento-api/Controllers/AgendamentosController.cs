@@ -17,7 +17,7 @@ namespace agendamento_api.Controllers
     public class AgendamentosController : ControllerBase
     {
         private readonly AgendamentoContext _context;
-
+        private const int AGENDAMENTO_CONCLUIDO = 2;
         public AgendamentosController(AgendamentoContext context)
         {
             _context = context;
@@ -177,6 +177,25 @@ namespace agendamento_api.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        
+        [HttpGet("/faturamento/{data}")]
+        //mm-yyyy
+        public async Task<ActionResult<IEnumerable<FaturamentoResponse>>> GetFaturamento(string data) 
+        {
+            var agendamentos = _context.Agendamentos.ToList();
+            
+
+            List<FaturamentoResponse> listaFaturamento = new List<FaturamentoResponse>();
+            foreach (var item in agendamentos)
+            {
+                var servico = await _context.Servicos.FindAsync(item.ServicoId);
+                if (item.Data.Contains(data) && item.StatusId == AGENDAMENTO_CONCLUIDO) {
+                    FaturamentoResponse faturamentoResponse = new FaturamentoResponse(item.Data, servico.Nome, servico.Valor );
+                    listaFaturamento.Add(faturamentoResponse);
+                }
+            }
+            return listaFaturamento;
         }
 
         private bool AgendamentoExists(int id)
