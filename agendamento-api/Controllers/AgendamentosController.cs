@@ -30,9 +30,14 @@ namespace agendamento_api.Controllers
           if (_context.Agendamentos == null)
           {
               return NotFound();
+
           }
             var agendamentos = await _context.Agendamentos.ToListAsync();
+
+
             List<AgendamentoResponse> agendamentoResponses = new List<AgendamentoResponse>();
+
+
             foreach (var item in agendamentos) 
             {
                 var servico = await _context.Servicos.FindAsync(item.ServicoId);
@@ -96,9 +101,10 @@ namespace agendamento_api.Controllers
             {
                 return NotFound();
             }
-            
 
-            if (DataExists(agendamentoDto.ServicoId, agendamentoDto.Data.Trim()) && agendamentoDto.Data.Trim() != agendamento.Data.Trim())
+            var servico = await _context.Servicos.FindAsync(agendamentoDto.ServicoId);
+
+            if (DataExists(servico.ProfissionalId, agendamentoDto.Data.Trim()) && agendamentoDto.Data.Trim() != agendamento.Data.Trim())
             {
                 return BadRequest("Já existe um agendamento neste horário");
             }
@@ -138,8 +144,9 @@ namespace agendamento_api.Controllers
           {
               return Problem("Entity set 'AgendamentoContext.Agendamentos'  is null.");
           }
-
-            if (DataExists(agendamentoDto.ServicoId, agendamentoDto.Data.Trim())) 
+            var servico = await _context.Servicos.FindAsync(agendamentoDto.ServicoId);
+            
+            if (DataExists(servico.ProfissionalId, agendamentoDto.Data.Trim())) 
             {
                 return BadRequest("Já existe um agendamento neste horário");
             }
@@ -177,13 +184,17 @@ namespace agendamento_api.Controllers
             return (_context.Agendamentos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private  bool DataExists(int idServico, string data) 
+        private  bool DataExists(int idProfissional, string data) 
         {
             var dataExists = _context.Agendamentos.ToList();
-             
+
+
+            
             foreach (var item in dataExists) 
             {
-                if (item.ServicoId == idServico && item.Data.Trim() == data.Trim())
+                var servico = _context.Servicos.FindAsync(item.ServicoId);
+                
+                if (servico.Result.ProfissionalId == idProfissional && item.Data.Trim() == data.Trim())
                 {
                     return true ;
                     
