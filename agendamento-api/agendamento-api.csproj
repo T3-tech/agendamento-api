@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>agendamento_api</RootNamespace>
+    <RuntimeFrameworkVersion>2.1.14</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
