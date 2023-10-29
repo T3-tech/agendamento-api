@@ -30,14 +30,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 #region [Cors]
 app.UseCors(c =>
 {
     c.AllowAnyHeader();
     c.AllowAnyMethod();
     c.AllowAnyOrigin();
-    c.AllowCredentials();
 });
 #endregion
 app.UseAuthorization();
