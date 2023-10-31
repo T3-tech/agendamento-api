@@ -46,11 +46,11 @@ namespace agendamento_api.Controllers
 
                 var listaServicos = servicosProfissional.Where(e => e.ProfissionalId.Equals(item.Id)).ToList();
 
-                List<Object> listaServicoResponse = new List<Object>();
+                List<ServicoResponseProfissional> listaServicoResponse = new List<ServicoResponseProfissional>();
 
                 foreach (var itemServico in listaServicos)
                 {
-                    var servicoResp = new
+                    ServicoResponseProfissional servicoResp = new ServicoResponseProfissional()
                     {
                         idServico = itemServico.Id,
                         nomeSevico = itemServico.Nome,
@@ -80,12 +80,12 @@ namespace agendamento_api.Controllers
 
             var listaServicos = servicosProfissional.Where(e => e.ProfissionalId.Equals(profissional.Id)).ToList();
 
-            List<Object> listaServicoResponse = new List<Object>();
+            List<ServicoResponseProfissional> listaServicoResponse = new List<ServicoResponseProfissional>();
 
 
             foreach (var itemServico in listaServicos)
             {
-                var servicoResp = new
+                ServicoResponseProfissional servicoResp = new ServicoResponseProfissional()
                 {
                     idServico = itemServico.Id,
                     nomeSevico = itemServico.Nome,
