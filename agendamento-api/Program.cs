@@ -30,7 +30,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 #region [Cors]
 app.UseCors(c =>
 {
