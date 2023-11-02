@@ -14,10 +14,10 @@ namespace agendamento_api.DtoResponse
         public string Cpf { get; set; }
 
 
-        public List<Object> ListaServico { get; set; } = new List<Object>();
+        public List<ServicoResponseProfissional> ListaServico { get; set; } = new List<ServicoResponseProfissional>();
 
 
-        public ProfissionalResponse(int id, string nome, string telefone, string cpf, List<Object> listaServico)
+        public ProfissionalResponse(int id, string nome, string telefone, string cpf, List<ServicoResponseProfissional> listaServico)
         {
             this.Id = id;
             this.Nome = nome;
