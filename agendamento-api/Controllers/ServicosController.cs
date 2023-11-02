@@ -36,8 +36,8 @@ namespace agendamento_api.Controllers
             List<Servico> list = await _context.Servicos.ToListAsync();
             foreach (var item in list)
             {
-                var nomeProfissional = await _context.Profissionais.FindAsync(item.ProfissionalId);
-                ServicoReponse servicoReponse = new ServicoReponse(item.Id, item.Nome, item.Valor, nomeProfissional.Nome);
+                var profissional = await _context.Profissionais.FindAsync(item.ProfissionalId);
+                ServicoReponse servicoReponse = new ServicoReponse(item.Id, item.Nome, item.Valor, profissional.Id, profissional.Nome);
                 servicoReponses.Add(servicoReponse);
 
 
@@ -60,7 +60,7 @@ namespace agendamento_api.Controllers
                 return NotFound();
             }
             var profissional = await _context.Profissionais.FindAsync(servico.ProfissionalId);
-            ServicoReponse servicoResponse = new ServicoReponse(servico.Id, servico.Nome, servico.Valor, profissional.Nome);
+            ServicoReponse servicoResponse = new ServicoReponse(servico.Id, servico.Nome, servico.Valor, profissional.Id, profissional.Nome);
             return servicoResponse;
         }
 
@@ -120,7 +120,7 @@ namespace agendamento_api.Controllers
                 _context.Servicos.Add(servico);
                 await _context.SaveChangesAsync();
 
-                ServicoReponse servicoResponse = new ServicoReponse(servico.Id, servico.Nome, servico.Valor, servico.Profissional.Nome);
+                ServicoReponse servicoResponse = new ServicoReponse(servico.Id, servico.Nome, servico.Valor, servico.ProfissionalId, servico.Profissional.Nome);
 
                 return Ok(servicoResponse);
             }
