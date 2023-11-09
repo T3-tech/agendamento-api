@@ -156,10 +156,7 @@ namespace agendamento_api.Controllers
             Profissional profissional = new Profissional(profissionalDto.Nome, profissionalDto.Telefone, profissionalDto.Cpf);
 
 
-            if (CpfExists(profissionalDto.Cpf))
-            {
-                return BadRequest("CPF já cadastrado");
-            }
+            
 
             _context.Profissionais.Add(profissional);
             await _context.SaveChangesAsync();
