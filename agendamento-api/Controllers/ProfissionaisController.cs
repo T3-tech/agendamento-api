@@ -124,6 +124,10 @@ namespace agendamento_api.Controllers
 
             _context.Entry(profissional).State = EntityState.Modified;
 
+            if (CpfExists(profissionalDto.Cpf)) {
+                return BadRequest("JÁ EXISTE CADASTRO COM ESSE CPF");
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
