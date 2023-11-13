@@ -120,10 +120,7 @@ namespace agendamento_api.Controllers
             profissional.Telefone = profissionalDto.Telefone;
             profissional.Cpf = profissionalDto.Cpf;
 
-            if (CpfExists(profissionalDto.Cpf))
-            {
-                return BadRequest("CPF já cadastrado");
-            }
+            
 
             _context.Entry(profissional).State = EntityState.Modified;
 
