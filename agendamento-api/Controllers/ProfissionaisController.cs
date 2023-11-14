@@ -115,6 +115,12 @@ namespace agendamento_api.Controllers
 
 
             var profissional = await _context.Profissionais.FindAsync(id);
+            if (!profissional.Cpf.Equals(profissionalDto.Cpf)) {
+                if (CpfExists(profissionalDto.Cpf)) {
+                    return BadRequest("CPF JÁ CADASTRADO");
+                }
+            }
+
 
             profissional.Nome = profissionalDto.Nome;
             profissional.Telefone = profissionalDto.Telefone;
@@ -123,10 +129,7 @@ namespace agendamento_api.Controllers
             
 
             _context.Entry(profissional).State = EntityState.Modified;
-
-            if (CpfExists(profissionalDto.Cpf)) {
-                return BadRequest("JÁ EXISTE CADASTRO COM ESSE CPF");
-            }
+            
 
             try
             {
