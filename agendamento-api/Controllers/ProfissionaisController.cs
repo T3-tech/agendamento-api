@@ -75,6 +75,12 @@ namespace agendamento_api.Controllers
                 return NotFound();
             }
             var profissional = await _context.Profissionais.FindAsync(id);
+
+            if (profissional == null)
+            {
+                return NotFound();
+            }
+
             List<Servico> servicosProfissional = await _context.Servicos.ToListAsync();
 
 
@@ -98,10 +104,7 @@ namespace agendamento_api.Controllers
             ProfissionalResponse profissionalResponse = new(profissional.Id, profissional.Nome, profissional.Telefone, profissional.Cpf, listaServicoResponse);
 
 
-            if (profissional == null)
-            {
-                return NotFound();
-            }
+            
 
             return profissionalResponse;
         }
